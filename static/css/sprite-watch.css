@@ -1,0 +1,21 @@
+
+@keyframes sprite-watch {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: -5916px 0px;
+  }
+}
+
+.sprite-watch {
+  width: 348px;
+  height: 448px;
+  background-image: url(../img/sprite-watch.jpg);
+  background-size: 6264px 100%;
+  animation-name: sprite-watch;
+  animation-duration: 1440ms;
+  animation-timing-function: steps(17);
+  animation-fill-mode: forwards;
+    
+}

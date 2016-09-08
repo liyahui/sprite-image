@@ -1,0 +1,36 @@
+{
+  "name": "sprite-image",
+  "version": "0.0.1",
+  "description": "sprite image",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel-core/register",
+    "dist": "babel src --out-dir lib",
+    "watch": "npm run dist -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liyahui/sprite-image.git"
+  },
+  "keywords": [
+    "sprite",
+    "image"
+  ],
+  "author": "liyahui",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/liyahui/sprite-image/issues"
+  },
+  "homepage": "https://github.com/liyahui/sprite-image#readme",
+  "devDependencies": {
+    "babel-core": "^6.14.0",
+    "babel-plugin-transform-runtime": "^6.15.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "mocha": "^3.0.2"
+  },
+  "dependencies": {
+    "images": "^3.0.0",
+    "lodash": "^4.15.0"
+  }
+}
