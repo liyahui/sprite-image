@@ -104,7 +104,7 @@ export default class SpriteImage {
     imgs = imgs.filter(file => /\.(png|jpe?g)$/.test(file))
 
     if (!imgs.length) {
-      throw Error(message.PATH_NOT_IMAGE)
+      return
     }
 
     if (options.keyframe) {

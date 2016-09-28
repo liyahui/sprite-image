@@ -44,14 +44,6 @@ describe('spriteImage.generate', () => {
     })
   })
 
-  it(message.PATH_NOT_IMAGE, () => {
-    assert.throws(() => {
-      spriteImage.generate(path.join(sprite, 'empty'))
-    }, err => {
-      return err.toString().includes(message.PATH_NOT_IMAGE)
-    })
-  })
-
   it(message.CONFIG_ERROR, () => {
     assert.throws(() => {
       spriteImage.generate(path.join(sprite, 'watch'), [])
