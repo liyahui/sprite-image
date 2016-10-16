@@ -86,7 +86,7 @@ export default class SpriteImage {
     if (options.keyframe) {
       options.keyframe = {
         width: 640,
-        height: 1138,
+        height: 1136,
         duration: 80,
         vertical: '100%',
         infinite: false,
