@@ -7,10 +7,10 @@ export const plainBgCSS = `${comments}
 `
 
 export const plainItemCss = `
-.<%= name %>-<%= img.name %> {
-  width: <%= img.wrap.width() %>px;
-  height: <%= img.wrap.height() %>px;
-  background-position: -<%= img.x %>px <%= img.y %>px;
+.<%= name %>-<%= item.meta %> {
+  width: <%= item.width %>px;
+  height: <%= item.height %>px;
+  background-position: -<%= item.x %>px <%= item.y %>px;
 }
 `
 
@@ -30,8 +30,8 @@ export const keyframeCSS = `
   background-image: url(<%= cssurl %>);
   background-size: <%= width %>px <%= keyframe.vertical %>;
   animation-name: <%= prefix %>-<%= name %>;
-  animation-duration: <%= keyframe.duration * imgs.length %>ms;
-  animation-timing-function: steps(<%= imgs.length - 1 %>);
+  animation-duration: <%= keyframe.duration * items.length %>ms;
+  animation-timing-function: steps(<%= items.length - 1 %>);
   animation-fill-mode: forwards;
   <% if(keyframe.infinite) { %>
   animation-iteration-count: infinite;

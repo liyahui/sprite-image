@@ -2,6 +2,7 @@ import path from 'path'
 import fs from 'fs'
 import images from 'images'
 import _ from 'lodash'
+import layout from 'layout'
 import message from './message'
 import { plainBgCSS, plainItemCss, keyframeCSS } from './template'
 
@@ -21,6 +22,12 @@ export default class SpriteImage {
     }
   }
 
+  sort = {
+    x: 'left-right',
+    y: 'top-down',
+    tree: 'binary-tree'
+  }
+
   constructor(config = {}) {
     // 合并传入配置、默认配置
     this.config = {...this.config, ...config }
@@ -37,7 +44,6 @@ export default class SpriteImage {
 
   generate(dir, options = {}) {
 
-    // 判断传入路径
     if (!dir) {
       throw Error(message.PATH_NULL)
     }
@@ -72,7 +78,8 @@ export default class SpriteImage {
       name,
       enable: true,
       outext: 'png',
-      padding: 0
+      padding: 0,
+      sort: this.sort.tree
     }
 
     // 如果为序列帧图，合并传入配置和默认配置
@@ -85,6 +92,11 @@ export default class SpriteImage {
         infinite: false,
         ...options.keyframe
       }
+
+      options.padding = 0
+      options.sort = this.sort.x
+    } else {
+      options.sort = this.sort.hasOwnProperty(options.sort) ? this.sort[options.sort] : this.sort.tree
     }
 
     return {
@@ -94,24 +106,28 @@ export default class SpriteImage {
   }
 
   _wrapImage(options) {
-    let width = 0
-    let height = 0
-    let x = 0
-    let y = 0
+    // 创建layout对象
+    let layer = layout(options.sort, {
+      sort: !options.keyframe
+    })
+
+    // 读取目录文件
     let imgs = fs.readdirSync(options.dir)
 
     // 过滤非png、jpg图片
     imgs = imgs.filter(file => /\.(png|jpe?g)$/.test(file))
 
-    if (!imgs.length) {
-      return
-    }
-
+    // 序列图按照文件名称从小到大排序
     if (options.keyframe) {
       imgs.sort((a, b) => parseInt(a) - parseInt(b))
     }
 
-    imgs = imgs.map(file => {
+    // 忽略没有图片文件的文件夹
+    if (!imgs.length) {
+      return
+    }
+
+    imgs.forEach(file => {
       let wrap = images(path.join(options.dir, file))
       let keyframe = options.keyframe
 
@@ -120,39 +136,29 @@ export default class SpriteImage {
         wrap.resize(keyframe.width, keyframe.height)
       }
 
-      let img = {
-        name: file.replace(path.extname(file), ''),
-        wrap,
-        x,
-        y
-      }
-
-      // 计算当前序列图片x坐标
-      x += wrap.width() + options.padding
-
-      // 计算生成图片宽度
-      width += wrap.width()
-
-      // 计算生成图片高度
-      if (wrap.height() > height) {
-        height = wrap.height()
-      }
-
-      return img
+      // 添加图片到layout中
+      layer.addItem({
+        width: wrap.width() + options.padding,
+        height: wrap.height() + options.padding,
+        meta: file.replace(path.extname(file), ''),
+        img: wrap
+      })
     })
 
-    width += options.padding * (imgs.length - 1)
+    // 图片排列信息
+    let result = layer.export()
 
-    return {
-      imgs,
-      width,
-      height
+    if (result.items.length) {
+      result.width -= options.padding
+      result.height -= options.padding
     }
+
+    return result
   }
 
-  _createImage(options, wrapper) {
+  _createImage(options, result) {
     // 创建合并后的图片
-    let newImg = images(wrapper.width, wrapper.height)
+    let newImg = images(result.width, result.height)
     let prefix = this.config.prefix
     let cssname = `${prefix}-${options.name}.css`
     let imgname = `${prefix}-${options.name}.${options.outext}`
@@ -161,7 +167,6 @@ export default class SpriteImage {
 
     if (options.keyframe) {
       // 生成动画以及动画调用
-
       if (Number.isInteger(options.keyframe.vertical)) {
         options.keyframe.vertical += 'px'
       }
@@ -169,7 +174,7 @@ export default class SpriteImage {
       css += _.template(keyframeCSS)({
         prefix,
         cssurl,
-        ...wrapper,
+        ...result,
         ...options
       })
 
@@ -179,22 +184,21 @@ export default class SpriteImage {
       css += _.template(plainBgCSS)({
         prefix,
         cssurl,
-        ...wrapper,
         ...options
       })
 
     }
 
-    wrapper.imgs.forEach(img => {
+    result.items.forEach(item => {
       // 把每张图片画到新创建的大图上
-      newImg.draw(img.wrap, img.x, img.y)
+      newImg.draw(item.img, item.x, item.y)
 
       // 生成图片宽高位置信息
       if (!options.keyframe) {
         css += _.template(plainItemCss)({
           prefix,
-          img,
-          ...wrapper,
+          item,
+          ...result,
           ...options
         })
       }
@@ -210,6 +214,7 @@ export default class SpriteImage {
     fs.existsSync(imgpath) || fs.mkdirSync(imgpath)
     newImg.save(path.join(imgpath, imgname))
 
+    // 垃圾回收
     images.gc()
   }
 }
