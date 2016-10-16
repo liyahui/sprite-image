@@ -12,53 +12,13 @@ let spriteImage = new SpriteImage({
 })
 
 describe('spriteImage.generate', () => {
-  it(message.PATH_NULL, () => {
-    assert.throws(() => {
-      spriteImage.generate()
-    }, err => {
-      return err.toString().includes(message.PATH_NULL)
-    })
-  })
-
-  it(message.PATH_NOT_STRING, () => {
-    assert.throws(() => {
-      spriteImage.generate(true)
-    }, err => {
-      return err.toString().includes(message.PATH_NOT_STRING)
-    })
-  })
-
-  it(message.PATH_ERROR, () => {
-    assert.throws(() => {
-      spriteImage.generate('string')
-    }, err => {
-      return err.toString().includes(message.PATH_ERROR)
-    })
-  })
-
-  it(message.PATH_NOT_EXISTS, () => {
-    assert.throws(() => {
-      spriteImage.generate(path.join(__dirname, 'not_exists'))
-    }, err => {
-      return err.toString().includes(message.PATH_NOT_EXISTS)
-    })
-  })
-
-  it(message.CONFIG_ERROR, () => {
-    assert.throws(() => {
-      spriteImage.generate(path.join(sprite, 'watch'), [])
-    }, err => {
-      return err.toString().includes(message.CONFIG_ERROR)
-    })
-  })
-
-  it('生成图标', () => {
+  it('合成图标并生成CSS', () => {
     assert.doesNotThrow(() => {
       spriteImage.generate(path.join(sprite, 'icon'))
     })
   })
 
-  it('生成执行一次动画的手表', () => {
+  it('合成序列帧并生成CSS：执行一次动画', () => {
     assert.doesNotThrow(() => {
       spriteImage.generate(path.join(sprite, 'watch'), {
         outext: 'jpg',
@@ -70,7 +30,7 @@ describe('spriteImage.generate', () => {
     })
   })
 
-  it('生成循环执行动画的猪仔', () => {
+  it('合成序列帧并生成CSS：循环执行动画', () => {
     assert.doesNotThrow(() => {
       spriteImage.generate(path.join(sprite, 'piglet'), {
         keyframe: {
