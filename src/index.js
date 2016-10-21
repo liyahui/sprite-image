@@ -13,9 +13,9 @@ export default class SpriteImage {
   // 默认配置
   config = {
     prefix: 'sprite',
-    imgdir: '',
-    cssdir: '',
-    cssimg: '',
+    imgdir: '../../img',
+    cssdir: '../../css',
+    cssimg: '../img',
     limit: {
       width: 64000,
       height: 64000
