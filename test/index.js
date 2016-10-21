@@ -5,11 +5,7 @@ import message from '../src/message'
 
 let sprite = path.resolve(__dirname, '../static/sprite')
 
-let spriteImage = new SpriteImage({
-  imgdir: '../../img',
-  cssdir: '../../css',
-  cssimg: '../img'
-})
+let spriteImage = new SpriteImage()
 
 describe('spriteImage.generate', () => {
   it('合成图标并生成CSS', () => {
