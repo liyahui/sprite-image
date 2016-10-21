@@ -10,7 +10,7 @@ export const plainItemCss = `
 .<%= name %>-<%= item.meta %> {
   width: <%= item.width %>px;
   height: <%= item.height %>px;
-  background-position: -<%= item.x %>px <%= item.y %>px;
+  background-position: -<%= item.x %>px -<%= item.y %>px;
 }
 `
 
