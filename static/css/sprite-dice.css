@@ -1,0 +1,23 @@
+
+@keyframes sprite-dice {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: -9200px 0px;
+  }
+}
+
+.sprite-dice {
+  width: 400px;
+  height: 400px;
+  background-image: url(../img/sprite-dice.png);
+  background-size: 9600px 100%;
+  animation-name: sprite-dice;
+  animation-duration: 480ms;
+  animation-timing-function: steps(23);
+  animation-fill-mode: forwards;
+  
+  animation-iteration-count: infinite;
+    
+}

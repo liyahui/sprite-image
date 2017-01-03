@@ -1,7 +1,6 @@
 import path from 'path'
 import assert from 'assert'
 import SpriteImage from '../src'
-import message from '../src/message'
 
 let sprite = path.resolve(__dirname, '../static/sprite')
 
@@ -28,11 +27,12 @@ describe('spriteImage.generate', () => {
 
   it('合成序列帧并生成CSS：循环执行动画', () => {
     assert.doesNotThrow(() => {
-      spriteImage.generate(path.join(sprite, 'piglet'), {
+      spriteImage.generate(path.join(sprite, 'dice'), {
         keyframe: {
           infinite: true,
-          width: 240,
-          height: 240
+          width: 400,
+          height: 400,
+          duration: 20
         }
       })
     })
